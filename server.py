@@ -8,7 +8,7 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 class EchoHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path.endswith(".ico"):
-            self.send_response(404)
+            self.send_response(200)
             return
             
             self.send_response(200)
