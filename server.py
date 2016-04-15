@@ -3,39 +3,24 @@
 import sys
 import os
 import sympy
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+from flask import Flask, render_template, redirect
 
-class EchoHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        if self.path.endswith(".ico"):
-            self.send_response(404)
-            return
-            
-            self.send_response(200)
-            self.end_headers()
-        try:
-            input = self.path[1:]
-            value = str(sympy.simplify(input)).strip()
-            self.wfile.write(value)
-            print "evaluated", input, "=", value
-            
-        except Exception as e:
-            self.wfile.write("couldn't evaluate that")
-            print "error on", self.path
-        finally:
-            self.close_connection()
-    
-    def do_POST(self):
-        pass
-        
-    def log_message(self, format, *args):
-        return
+app = Flask(__name__)
 
-def main():
-   port = int(os.environ.get('PORT') or 80)
-   server = HTTPServer(('', port), EchoHandler)
-   print 'serving on port', port
-   server.serve_forever()
-    
+
+@app.route("/<input>")
+def calculate(input = ''):
+    try:
+        desc = ''
+        title = str(sympy.simplify(input))
+        return render_template('index.html', title=title, description = desc)
+    except Exception as e:
+        return render_template('index.html', title='Sorry :(', description = "There was an error parsing mathematical expression")
+
+@app.route("/")
+def home():
+    return render_template('index.html', title='Send me an expression', description = "There's a lot of mathematical equations I can simplify for you")
+
 if __name__ == '__main__':
-    sys.exit(int(main() or 0))
+    port = os.environ.get('PORT') or 8000
+    app.run(port = port)
