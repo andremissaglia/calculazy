@@ -8,7 +8,7 @@ from flask import Flask, render_template, redirect
 app = Flask(__name__)
 
 
-@app.route("/<input>")
+@app.route("/<path:input>")
 def calculate(input = ''):
     try:
         desc = ''
