@@ -8,7 +8,7 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 class EchoHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path.endswith(".ico"):
-            self.send_response(200)
+            self.send_response(404)
             return
             
             self.send_response(200)
@@ -22,13 +22,11 @@ class EchoHandler(BaseHTTPRequestHandler):
         except Exception as e:
             self.wfile.write("couldn't evaluate that")
             print "error on", self.path
+        finally:
+            self.close_connection()
     
     def do_POST(self):
         pass
-    #     len = int(self.headers['Content-Length'])
-    #     self.co
-    #     print self.rfile.read(len)
-    #     return
         
     def log_message(self, format, *args):
         return
